@@ -1,0 +1,38 @@
+/**
+Rotación a la izq
+*/
+
+#include <iostream>
+
+using namespace std;
+
+int busca (int arreglo[5], int inicio, int fin, int index) {
+    int mitad;
+    if (inicio > fin)
+        return -1;
+    else  mitad = (inicio + fin) /2;
+    if (index == arreglo[mitad])
+    return mitad;
+    else if (index < arreglo[mitad])
+     return(busca(arreglo,inicio, mitad-1,index));
+    else return(busca(arreglo,mitad+1,fin,index));
+
+}
+int main(){
+
+    int data[5] = {2,4,6,8,10};
+    int data2[5] = {10,2,4,6,8};
+
+    int resultado1 = busca(data,0,4,6);
+    int resultado2 = busca(data2,0,4,6);
+
+    int x = resultado1-resultado2;
+
+    if(resultado1-resultado2 < 0){
+        cout << x + 5;
+    }else{
+        cout << x;
+    }
+
+    return 0;
+}
