@@ -1,0 +1,182 @@
+/**
+Tanya Yaretzi González Elizondo
+*/
+
+
+
+#include <iostream>
+
+using namespace std;
+
+const int N = 7;
+const int INF = 99999;
+
+int suma =0;
+
+void Camino(int path[][N], int d[][N], int inicio, int fin){
+    if(path[inicio][fin]>= 0 && path[inicio][fin]<INF){
+        Camino(path,d,inicio,path[inicio][fin]);
+        cout << path[inicio][fin] << " " ;
+        Camino(path,d,path[inicio][fin],fin);
+    }
+}
+
+
+void floydMejorTiempo(int d[N][N],int p[N][N], int e[N][N], int auxCosto[N][N]){
+    for(int k=0; k < N; k++){
+        for(int i=0; i < N; i++){
+            for(int j=0; j<N; j++){
+
+                if((d[i][k] + d[k][j]) < d[i][j] ){
+
+                    d[i][j] = d[i][k] + d[k][j];
+                    e[i][j] = (e[i][k] + e[k][j])+1;
+
+                    auxCosto[i][j] = auxCosto[i][k] + auxCosto[k][j];
+
+                    p[i][j] = k; //llenas la matriz P
+
+                }
+            }
+        }
+    }
+}
+
+void floydMejorCosto(int d[N][N],int p[N][N], int e[N][N], int auxTiempo[N][N]){
+    for(int k=0; k < N; k++){
+        for(int i=0; i < N; i++){
+            for(int j=0; j<N; j++){
+
+                if((d[i][k] + d[k][j]) < d[i][j] ){
+
+                    d[i][j] = d[i][k] + d[k][j];
+                    e[i][j] = (e[i][k] + e[k][j])+1;
+
+                    auxTiempo[i][j] = auxTiempo[i][k] + auxTiempo[k][j];
+
+                    p[i][j] = k; //llenas la matriz P
+
+                }
+            }
+        }
+    }
+}
+
+int main()
+{
+   /* int t[N][N]= {
+    {0,160,INF, INF},
+    {160,0,29,97},
+    {INF,29,0,64},
+    {INF,97,64,0}
+    };
+
+    int auxTiempo[N][N]= {
+    {0,160,INF, INF},
+    {160,0,29,97},
+    {INF,29,0,64},
+    {INF,97,64,0}
+    };
+
+    int c[N][N] = {
+    {0,250,INF,INF},
+    {250,0,107,52},
+    {INF,107,0,223},
+    {INF,52,223,0}
+    };
+
+    int auxCosto[N][N] = {
+    {0,250,INF,INF},
+    {250,0,107,52},
+    {INF,107,0,223},
+    {INF,52,223,0}
+    };
+*/
+
+int c[N][N] = {
+        {0,INF,INF,INF,700,889,INF},
+        {INF,0,INF,423,INF,44,INF},
+        {INF,INF,0,972,INF,845,INF},
+        {INF,423,972,0,INF,INF,INF},
+        {700,INF,INF,INF,0,786,574},
+        {889,44,845,INF,786,0,INF},
+        {INF,INF,INF,INF,574,INF,0}
+    };
+
+    int auxCosto[N][N] = {
+        {0,INF,INF,INF,700,889,INF},
+        {INF,0,INF,423,INF,44,INF},
+        {INF,INF,0,972,INF,845,INF},
+        {INF,423,972,0,INF,INF,INF},
+        {700,INF,INF,INF,0,786,574},
+        {889,44,845,INF,786,0,INF},
+        {INF,INF,INF,INF,574,INF,0}
+    };
+
+  //Matriz de adyacencias del tiempo
+     int t[N][N] = {
+        {0,  INF,INF,INF,45, 27, INF},
+        {INF,0  ,INF,150,INF,100,INF},
+        {INF,INF,0,  58, INF,72, INF},
+        {INF,150,58, 0,  INF,INF,INF},
+        {45, INF,INF,INF,0,  88, 54},
+        {27, 100,72, INF,88, 0,  INF},
+        {INF,INF,INF,INF,54, INF, 0}
+     };
+
+      int auxTiempo[N][N] = {
+        {0,  INF,INF,INF,45, 27, INF},
+        {INF,0  ,INF,150,INF,100,INF},
+        {INF,INF,0,  58, INF,72, INF},
+        {INF,150,58, 0,  INF,INF,INF},
+        {45, INF,INF,INF,0,  88, 54},
+        {27, 100,72, INF,88, 0,  INF},
+        {INF,INF,INF,INF,54, INF, 0}
+     };
+
+    int p[N][N];
+    int p2[N][N];
+    int e[N][N];
+    int e2[N][N];
+
+    //Llena matriz p
+    for(int i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+            if(i == j){
+                p[i][j] = 0;
+                p2[i][j] = 0;
+            }else{
+             p[i][j] = INF;
+             p2[i][j] = INF;
+            }
+        }
+    }
+
+    //Llena matriz e
+    for(int i=0; i<N; i++){
+        for(int j=0; j<N; j++){
+                e[i][j] = 0;
+                e2[i][j] = 0;
+        }
+    }
+
+
+    floydMejorTiempo(t,p,e,auxCosto);
+
+    floydMejorCosto(c,p2,e2,auxTiempo);
+
+    int origen = 3;
+    int destino = 0;
+
+    cout << "Camino con mejor tiempo: ";
+    Camino(p,auxCosto,origen,destino);
+    cout <<"\nsuma costo: " << auxCosto[origen][destino] << endl;
+
+    cout << endl;
+
+    cout << "Camino con mejor costo: ";
+    Camino(p2,auxTiempo,origen,destino);
+    cout <<"\nsuma tiempo: " << auxTiempo[origen][destino] << endl;
+
+    return 0;
+}
